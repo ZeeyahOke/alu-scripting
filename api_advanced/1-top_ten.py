@@ -28,3 +28,5 @@ def top_ten(subreddit):
     for post in data:
         print(post.get("data", {}).get("title"))
 
+
+# top_ten("programming")
