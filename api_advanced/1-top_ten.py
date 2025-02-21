@@ -5,13 +5,28 @@ import requests
 
 
 def top_ten(subreddit):
-    """Main function"""
-    URL = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    """
+    A function that fetches and prints the titles
+    of the top ten hot posts from a subreddit.
+    """
 
-    HEADERS = {"User-Agent": "PostmanRuntime/7.35.0"}
-    try:
-        RESPONSE = requests.get(URL, headers=HEADERS, allow_redirects=False)
-        HOT_POSTS = RESPONSE.json().get("data").get("children")
-        [print(post.get('data').get('title')) for post in HOT_POSTS]
-    except Exception:
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(
+        url,
+        params={"after": None},
+        allow_redirects=False,
+        headers=headers,
+    )
+
+    if response.status_code != 200:
         print(None)
+        return
+
+    jsonData = response.json()
+    data = jsonData["data"]["children"]
+    for post in data:
+        print(post.get("data", {}).get("title"))
+
+
+# top_ten("programming")
